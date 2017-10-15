@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>admin_delete</title>
+{% endblock %}
+{% block inner %}
+    <aside id="fh5co-content">
+		<div class="container">
+            {% if pas %}
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                     <th>id</th>
+                     <th>标题</th>
+                     <th>时间</th>
+                     <th>内容</th>
+                     <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in blogs %}
+                    <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.time }}</td>
+                    <td>{{ item.content }}</td>
+                    <td><a class="btn btn-info" data-url="{{ url_for('admin_blog_manage', pk=item.id) }}" href="javascript:;" title="">删除</a></td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+            {% else %}
+            <form class="form-horizontal form-login" role="form" method="post" >
+                <div class="form-group">
+                    <label for="formpassword" class="col-sm-2 control-label">{{ form.password.label.text }}</label>
+                    <div class="col-sm-3">
+                     {{ form.password }}
+                     </div>
+                    <div class="col-sm-5">
+                        <ul class="text-danger">
+                            {% for err in form.password.errors %}
+                             <li>{{ err }}</li>
+                             {% endfor %}
+                          </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        {{ form.csrf_token }}     <!--   在这个必须加-->
+                        {{ form.submit }}
+                    </div>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </aside>
+
+{% endblock %}
+
+{% block extrajs %}
+        <script>
+            $(function(){
+                $(".btn").on('click', function(){
+                    alert('hhhh');
+                    var _self = $(this);
+                    $.post(_self.attr('data-url'), function(rest){
+                        if (rest === '201'){
+                        _self.parents('tr').hide();
+                        alert('操作成功');
+                        }else if (rest === '404'){
+                        alert('未找到')
+                        }
+                    })
+                })
+            })
+        </script>
+{% endblock %}
+
