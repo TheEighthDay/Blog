@@ -20,12 +20,14 @@ def index():
 @app.route('/blog/', methods=['GET'])
 def blog():
     """ blog """
-    return render_template('blog.html')
+    blogs=Blog.query.filter_by(is_valid=True).all()
+    return render_template('blog.html',blogs=blogs)
 
-@app.route('/blogcontent/', methods=['GET'])
-def blogcontent():
+@app.route('/blogcontent/<int:pk>', methods=['GET'])
+def blogcontent(pk):
     """ blogcontent """
-    return render_template('blogcontent.html')
+    blog_obj=Blog.query.filter_by(id=pk).first()
+    return render_template('blogcontent.html',blog_obj=blog_obj)
 
 @app.route('/lifestyle/', methods=['GET'])
 def lifestyle():
@@ -46,12 +48,13 @@ def contact():
 
     return render_template('contact.html',form=form)
 
-@app.route('/admin/add',methods=['GET', 'POST'])
-def admin_add():
+@app.route('/admin',methods=['GET', 'POST'])
+def admin():
     """ 后台增加 """
     pas=False
     add = AddBlogForm()
     form=LoginForm()
+    blogs = Blog.query.filter_by(is_valid=True).all()
     if form.validate_on_submit():
         pas=True
     if add.validate_on_submit():
@@ -67,23 +70,16 @@ def admin_add():
         flash('Successful')
 
 
-    return render_template('admin_add.html', form=form, pas=pas, add=add)
+    return render_template('admin.html', form=form, pas=pas, add=add,blogs=blogs)
 
-@app.route('/admin/delete',methods=['GET', 'POST'])
-def admin_delete():
-    """后台删除"""
-    pas = False
-    form = LoginForm()
-    blogs = Blog.query.filter_by(is_valid=True).all()
-    if form.validate_on_submit():
-        pas = True
 
-    return render_template('admin_delete.html', form=form, pas=pas,blogs=blogs)
 
 
 @app.route('/admin/blog/<int:pk>',methods=[ 'POST'])
 def admin_blog_manage(pk):
     """ blog微博 """
+    if(type(pk)!=int):
+        return '404'
     blog = Blog.query.filter_by(id=pk, is_valid=1).first()
     if blog is None:
         return '404'

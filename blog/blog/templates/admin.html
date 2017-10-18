@@ -1,0 +1,307 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>admin</title>
+{% endblock %}
+{% block inner %}
+
+
+
+    <aside id="fh5co-content">
+		<div class="container">
+            {% if pas %}
+                <div class="text-center">
+                <button type="button" id="btn1" class="btn btn-success " >Add Blog</button>
+                <button type="button" id="btn2" class="btn btn-info" >Delete Blog</button>
+                <button type="button" id="btn3" class="btn btn-success" >Add Diary</button>
+                <button type="button" id="btn4" class="btn btn-info" >Delete Diary</button>
+                </div>
+            <div id="div1">
+            <form class="form-horizontal form-login" role="form" method="post" >
+                <div class="form-group">
+                    <label for="addtitle" class="col-sm-2 control-label">{{ add.title.label.text }}</label>
+                    <div class="col-sm-3">
+                     {{ add.title }}
+                     </div>
+                    <div class="col-sm-5">
+                        <ul class="text-danger">
+                            {% for err in add.title.errors %}
+                             <li>{{ err }}</li>
+                             {% endfor %}
+                          </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="addtitle" class="col-sm-2 control-label">{{ add.time.label.text }}</label>
+                    <div class="col-sm-3">
+                     {{ add.time }}
+                     </div>
+                    <div class="col-sm-5">
+                        <ul class="text-danger">
+                            {% for err in add.time.errors %}
+                             <li>{{ err }}</li>
+                             {% endfor %}
+                          </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="addtitle" class="col-sm-5 control-label">{{ add.content.label.text }}</label>
+                    <div class="col-sm-12 field" >
+                     {{ add.content }}
+                     </div>
+                    <div class="col-sm-5">
+                        <ul class="text-danger">
+                            {% for err in add.content.errors %}
+                             <li>{{ err }}</li>
+                             {% endfor %}
+                          </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        {{ form.csrf_token }}     <!--   在这个必须加-->
+                        {{ form.submit }}
+                    </div>
+                </div>
+            </form>
+            </div>
+            <div id="div2" style="display: none">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                     <th>id</th>
+                     <th>标题</th>
+                     <th>时间</th>
+                     <th>内容</th>
+                     <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="table2">
+                {% for item in blogs %}
+                    <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.time }}</td>
+                    <td>{{ item.content }}</td>
+                    <td><a class="btn btn-info" data-url="{{ url_for('admin_blog_manage', pk=item.id) }}" href="javascript:;" title="">删除</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <span id="spanFirst">第一页</span> <span id="spanPre">上一页</span><span id="spanNext">下一页</span> <span id="spanLast">最后一页</span> 第<span id="spanPageNum"></span>页/共<span id="spanTotalPage"></span>页
+            </div>
+
+            {% else %}
+            <form class="form-horizontal form-login" role="form" method="post" >
+                <div class="form-group">
+                    <label for="formpassword" class="col-sm-2 control-label">{{ form.password.label.text }}</label>
+                    <div class="col-sm-3">
+                     {{ form.password|safe }}
+                     </div>
+                    <div class="col-sm-5">
+                        <ul class="text-danger">
+                            {% for err in form.password.errors %}
+                             <li>{{ err }}</li>
+                             {% endfor %}
+                          </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        {{ form.csrf_token }}     <!--   在这个必须加-->
+                        {{ form.submit }}
+                    </div>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </aside>
+
+
+
+{% endblock %}
+
+{% block extrajs %}
+    <script>
+    $(function(){
+        $(".btn").on('click', function(){
+        var _self = $(this);
+        $.post(_self.attr('data-url'), function(rest){
+            if (rest === '201'){
+                _self.parents('tr').hide();
+                alert('successful');
+            }else if (rest === '404'){
+                alert('failed')
+            }
+          })
+        })
+    })
+
+    $('#btn1').on('click', function (){
+        $('#div1').show();
+        $('#div2').hide();
+    })
+    $('#btn2').on('click', function (){
+        $('#div2').show();
+        $('#div1').hide();
+    })
+
+
+    </script>
+    <script>
+     var theTable = document.getElementById("table2");
+     var totalPage = document.getElementById("spanTotalPage");
+     var pageNum = document.getElementById("spanPageNum");
+
+
+     var spanPre = document.getElementById("spanPre");
+     var spanNext = document.getElementById("spanNext");
+     var spanFirst = document.getElementById("spanFirst");
+     var spanLast = document.getElementById("spanLast");
+
+
+     var numberRowsInTable = theTable.rows.length;
+     var pageSize = 10;
+     var page = 1;
+
+
+     //下一页
+     function next() {
+
+
+         hideTable();
+
+
+         currentRow = pageSize * page;
+         maxRow = currentRow + pageSize;
+         if (maxRow > numberRowsInTable) maxRow = numberRowsInTable;
+         for (var i = currentRow; i < maxRow; i++) {
+             theTable.rows[i].style.display = '';
+         }
+         page++;
+
+
+         if (maxRow == numberRowsInTable) { nextText(); lastText(); }
+         showPage();
+         preLink();
+         firstLink();
+     }
+
+
+     //上一页
+     function pre() {
+
+
+         hideTable();
+
+
+         page--;
+
+
+         currentRow = pageSize * page;
+         maxRow = currentRow - pageSize;
+         if (currentRow > numberRowsInTable) currentRow = numberRowsInTable;
+         for (var i = maxRow; i < currentRow; i++) {
+             theTable.rows[i].style.display = '';
+         }
+
+
+
+
+         if (maxRow == 0) { preText(); firstText(); }
+         showPage();
+         nextLink();
+         lastLink();
+     }
+
+
+     //第一页
+     function first() {
+         hideTable();
+         page = 1;
+         for (var i = 0; i < pageSize; i++) {
+             theTable.rows[i].style.display = '';
+         }
+         showPage();
+
+
+         preText();
+         nextLink();
+         lastLink();
+     }
+
+
+     //最后一页
+     function last() {
+         hideTable();
+         page = pageCount();
+         currentRow = pageSize * (page - 1);
+         for (var i = currentRow; i < numberRowsInTable; i++) {
+             theTable.rows[i].style.display = '';
+         }
+         showPage();
+
+
+         preLink();
+         nextText();
+         firstLink();
+     }
+
+
+     function hideTable() {
+         for (var i = 0; i < numberRowsInTable; i++) {
+             theTable.rows[i].style.display = 'none';
+         }
+     }
+
+
+     function showPage() {
+         pageNum.innerHTML = page;
+     }
+
+
+     //总共页数
+     function pageCount() {
+         var count = 0;
+         if (numberRowsInTable % pageSize != 0) count = 1;
+         return parseInt(numberRowsInTable / pageSize) + count;
+     }
+
+
+     //显示链接
+     function preLink() { spanPre.innerHTML = "<a href='javascript:pre();'>上一页</a>"; }
+     function preText() { spanPre.innerHTML = "上一页"; }
+
+
+     function nextLink() { spanNext.innerHTML = "<a href='javascript:next();'>下一页</a>"; }
+     function nextText() { spanNext.innerHTML = "下一页"; }
+
+
+     function firstLink() { spanFirst.innerHTML = "<a href='javascript:first();'>第一页</a>"; }
+     function firstText() { spanFirst.innerHTML = "第一页"; }
+
+
+     function lastLink() { spanLast.innerHTML = "<a href='javascript:last();'>最后一页</a>"; }
+     function lastText() { spanLast.innerHTML = "最后一页"; }
+
+
+     //隐藏表格
+     function hide() {
+         for (var i = pageSize; i < numberRowsInTable; i++) {
+             theTable.rows[i].style.display = 'none';
+         }
+
+
+         totalPage.innerHTML = pageCount();
+         pageNum.innerHTML = '1';
+
+
+         nextLink();
+         lastLink();
+     }
+
+
+     hide();
+    </script>
+
+{% endblock %}
+

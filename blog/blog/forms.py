@@ -37,7 +37,7 @@ class AddBlogForm(FlaskForm):
 
     content = TextAreaField(label='blog', validators=[DataRequired('Please input blog')],
                             description="Please input blog",
-                            render_kw={"required": "required", "class": "form-control","cols":'30',"rows":'10'})
+                            render_kw={"required": "required", "class": "form-control","cols":'60',"rows":'10'})
     submit = SubmitField('Submit', render_kw={
         'class': 'btn btn-info',"placeholder": "Submit"},)
 
