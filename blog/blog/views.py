@@ -15,7 +15,8 @@ from Email import send
 @app.route('/', methods=['GET'])
 def index():
     """ index """
-    return render_template('index.html')
+    blogs = Blog.query.filter_by(is_valid=True).all()
+    return render_template('index.html',blogs=blogs)
 
 @app.route('/blog/', methods=['GET'])
 def blog():
@@ -27,7 +28,8 @@ def blog():
 def blogcontent(pk):
     """ blogcontent """
     blog_obj=Blog.query.filter_by(id=pk).first()
-    return render_template('blogcontent.html',blog_obj=blog_obj)
+    blogs=Blog.query.filter_by(is_valid=True).all()
+    return render_template('blogcontent.html',blog_obj=blog_obj,blogs=blogs)
 
 @app.route('/lifestyle/', methods=['GET'])
 def lifestyle():

@@ -131,8 +131,8 @@
 							</div>
 
 							<div class="blog-entry">
-								<a href="#">
-									<img src="{{ url_for('static', filename='images/blog-1.jpg', _external=True) }}" class="img-responsive" alt="">
+								<a href="{{ url_for('blogcontent',pk=blogs[-1].id) }}">
+									<img src="{{ url_for('static', filename='images/blog-2.jpg', _external=True) }}" class="img-responsive" alt="">
 									<div class="desc">
 										<span class="date">{{ blogs[-1].time }}</span>
 										<h3>{{ blogs[-1].title }}</h3>
@@ -140,8 +140,8 @@
 								</a>
 							</div>
                             <div class="blog-entry">
-								<a href="#">
-									<img src="{{ url_for('static', filename='images/blog-1.jpg', _external=True) }}" class="img-responsive" alt="">
+								<a href="{{ url_for('blogcontent',pk=blogs[-2].id) }}">
+									<img src="{{ url_for('static', filename='images/blog-2.jpg', _external=True) }}" class="img-responsive" alt="">
 									<div class="desc">
 										<span class="date">{{ blogs[-2].time }}</span>
 										<h3>{{ blogs[-2].title }}</h3>
@@ -149,8 +149,8 @@
 								</a>
 							</div>
                             <div class="blog-entry">
-								<a href="#">
-									<img src="{{ url_for('static', filename='images/blog-1.jpg', _external=True) }}" class="img-responsive" alt="">
+								<a href="{{ url_for('blogcontent',pk=blogs[-3].id) }}">
+									<img src="{{ url_for('static', filename='images/blog-2.jpg', _external=True) }}" class="img-responsive" alt="">
 									<div class="desc">
 										<span class="date">{{ blogs[-3].time }}</span>
 										<h3>{{ blogs[-3].title }}</h3>

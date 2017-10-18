@@ -7,10 +7,9 @@
         <div class="fh5co-blog animate-box">
             <div class="title title-pin text-center">
                 <span class="posted-on">{{ blog_obj.time }}</span>
-                <h3><a href="#">{{ blog_obj.title }}</a></h3>
+                <h3>{{ blog_obj.title }}</h3>
                 <span class="category">Blog</span>
             </div>
-{#	<a href="#"><img class="img-responsive" src="{{ url_for('static', filename='images/blog-1.jpg', _external=True) }}" alt=""></a>#}
             <div class="blog-text">
                 <pre>{{ blog_obj.content }}</pre>
             </div>

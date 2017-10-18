@@ -153,49 +153,7 @@
 		</div>
 	</aside>
 
-	<div id="fh5co-blog-popular">
-		<div class="container">
-			<div class="row animate-box">
-				<div class="col-md-12 col-md-offset-0 text-center fh5co-heading">
-					<h2><span>Popular Post</span></h2>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-3">
-					<div class="fh5co-blog animate-box">
-						<a href="#"><img class="img-responsive" src="{{ url_for('static', filename='images/blog-1.jpg', _external=True) }}" alt=""></a>
-						<div class="blog-text">
-							<h3><a href="#">Conquer The World</a></h3>
-						</div> 
-					</div>
-				</div>
-				<div class="col-md-3">
-					<div class="fh5co-blog animate-box">
-						<a href="#"><img class="img-responsive" src="{{ url_for('static', filename='images/blog-2.jpg', _external=True) }}" alt=""></a>
-						<div class="blog-text">
-							<h3><a href="#">List Minimal Design</a></h3>
-						</div> 
-					</div>
-				</div>
-				<div class="col-md-3">
-					<div class="fh5co-blog animate-box">
-						<a href="#"><img class="img-responsive" src="{{ url_for('static', filename='images/blog-1.jpg', _external=True) }}" alt=""></a>
-						<div class="blog-text">
-							<h3><a href="#">Modeling Spotted</a></h3>
-						</div> 
-					</div>
-				</div>
-				<div class="col-md-3">
-					<div class="fh5co-blog animate-box">
-						<a href="#"><img class="img-responsive" src="{{ url_for('static', filename='images/blog-2.jpg', _external=True) }}" alt=""></a>
-						<div class="blog-text">
-							<h3><a href="#">Around The World</a></h3>
-						</div> 
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+
 
 	<div id="fh5co-content">
 		<div class="container">
@@ -293,29 +251,29 @@
 								<h2><span>Latest Posts</span></h2>
 							</div>
 							<div class="blog-entry">
-								<a href="#">
-									<img src="{{ url_for('static', filename='images/blog-1.jpg', _external=True) }}" class="img-responsive" alt="">
-									<div class="desc">
-										<span class="date">Dec. 25, 2016</span>
-										<h3>Most Beautiful Site in 2016</h3>
-									</div>
-								</a>
-							</div>
-							<div class="blog-entry">
-								<a href="#">
+								<a href="{{ url_for('blogcontent',pk=blogs[-1].id) }}">
 									<img src="{{ url_for('static', filename='images/blog-2.jpg', _external=True) }}" class="img-responsive" alt="">
 									<div class="desc">
-										<span class="date">Dec. 25, 2016</span>
-										<h3>Most Beautiful Site in 2016</h3>
+										<span class="date">{{ blogs[-1].time }}</span>
+										<h3>{{ blogs[-1].title }}</h3>
 									</div>
 								</a>
 							</div>
-							<div class="blog-entry">
-								<a href="#">
-									<img src="{{ url_for('static', filename='images/blog-1.jpg', _external=True) }}" class="img-responsive" alt="">
+                            <div class="blog-entry">
+								<a href="{{ url_for('blogcontent',pk=blogs[-2].id) }}">
+									<img src="{{ url_for('static', filename='images/blog-2.jpg', _external=True) }}" class="img-responsive" alt="">
 									<div class="desc">
-										<span class="date">Dec. 25, 2016</span>
-										<h3>Most Beautiful Site in 2016</h3>
+										<span class="date">{{ blogs[-2].time }}</span>
+										<h3>{{ blogs[-2].title }}</h3>
+									</div>
+								</a>
+							</div>
+                            <div class="blog-entry">
+								<a href="{{ url_for('blogcontent',pk=blogs[-3].id) }}">
+									<img src="{{ url_for('static', filename='images/blog-2.jpg', _external=True) }}" class="img-responsive" alt="">
+									<div class="desc">
+										<span class="date">{{ blogs[-3].time }}</span>
+										<h3>{{ blogs[-3].title }}</h3>
 									</div>
 								</a>
 							</div>
