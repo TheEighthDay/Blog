@@ -106,6 +106,15 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="formpassword" class="col-sm-2 control-label">identify</label>
+                    <div class="col-sm-3 ">
+                         <input type="text" name="identify" maxlength="5"/>
+                    </div>
+                    <div class="col-sm-5">
+                       <img src=1 id="imgident">
+                    </div>
+                </div>
+                <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         {{ form.csrf_token }}     <!--   在这个必须加-->
                         {{ form.submit }}
@@ -121,6 +130,14 @@
 {% endblock %}
 
 {% block extrajs %}
+    <script type="text/javascript">
+
+    function imgFlush(){
+        document.getElementById("imgident").src ='{{ url_for('static',filename='images/idencode'+i+'.png') }}';
+        }
+    setInterval("imgFlush()",1000);
+    </script>
+
     <script>
     $(function(){
         $(".btn").on('click', function(){

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #coding=utf-8
-
+import os
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -11,6 +11,7 @@ from blog import  db, app
 from forms import LoginForm,AddBlogForm,ContactForm
 from models import Blog
 from Email import send
+from identifycode import gene_code
 
 @app.route('/', methods=['GET'])
 def index():
@@ -49,16 +50,32 @@ def contact():
             flash('Failed to send')
 
     return render_template('contact.html',form=form)
-
+text=''
+i=0
 @app.route('/admin',methods=['GET', 'POST'])
 def admin():
     """ 后台增加 """
+    global text
+    global i
     pas=False
     add = AddBlogForm()
     form=LoginForm()
     blogs = Blog.query.filter_by(is_valid=True).all()
-    if form.validate_on_submit():
-        pas=True
+    if (request.method != 'POST'):
+         text,image = gene_code()
+         i+=1
+         image.save('blog/static/images/idencode'+str(i)+'.png')  # 保存验证码图片
+         if(os.path.exists(os.path.dirname(__file__)+'/static/images/idencode'+str(i-1)+'.png')):
+             print ('1')
+             os.remove(os.path.dirname(__file__)+'/static/images/idencode'+str(i-1)+'.png')
+         else:
+             print('0');
+
+    print (text)
+    identify = request.form.get('identify', '')
+    print identify
+    if form.validate_on_submit() and identify==text:
+            pas = True
     if add.validate_on_submit():
         pas=True
         blog = Blog(
@@ -72,7 +89,7 @@ def admin():
         flash('Successful')
 
 
-    return render_template('admin.html', form=form, pas=pas, add=add,blogs=blogs)
+    return render_template('admin.html', form=form, pas=pas, add=add,blogs=blogs,i=str(i))
 
 
 
