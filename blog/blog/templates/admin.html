@@ -58,8 +58,8 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        {{ form.csrf_token }}     <!--   在这个必须加-->
-                        {{ form.submit }}
+                        {{ add.csrf_token }}     <!--   在这个必须加-->
+                        {{ add.submit }}
                     </div>
                 </div>
             </form>
@@ -88,6 +88,93 @@
                 </tbody>
             </table>
             <span id="spanFirst">第一页</span> <span id="spanPre">上一页</span><span id="spanNext">下一页</span> <span id="spanLast">最后一页</span> 第<span id="spanPageNum"></span>页/共<span id="spanTotalPage"></span>页
+            </div>
+            <div id="div3" style="display: none">
+            <form class="form-horizontal form-login" role="form" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="addtitle" class="col-sm-2 control-label">{{ add2.title.label.text }}</label>
+                    <div class="col-sm-3">
+                     {{ add2.title }}
+                     </div>
+                    <div class="col-sm-5">
+                        <ul class="text-danger">
+                            {% for err in add2.title.errors %}
+                             <li>{{ err }}</li>
+                             {% endfor %}
+                          </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="addtitle" class="col-sm-2 control-label">{{ add2.time.label.text }}</label>
+                    <div class="col-sm-3">
+                     {{ add2.time }}
+                     </div>
+                    <div class="col-sm-5">
+                        <ul class="text-danger">
+                            {% for err in add2.time.errors %}
+                             <li>{{ err }}</li>
+                             {% endfor %}
+                          </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="addtitle" class="col-sm-5 control-label">{{ add2.content.label.text }}</label>
+                    <div class="col-sm-12 field" >
+                     {{ add2.content }}
+                     </div>
+                    <div class="col-sm-5">
+                        <ul class="text-danger">
+                            {% for err in add2.content.errors %}
+                             <li>{{ err }}</li>
+                             {% endfor %}
+                          </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="addtitle" class="col-sm-5 control-label">{{ add2.picture.label.text }}</label>
+                    <div class="col-sm-12 field" >
+                    {{ add2.picture }}
+                     </div>
+                    <div class="col-sm-5">
+                        <ul class="text-danger">
+                            {% for err in add2.picture.errors %}
+                             <li>{{ err }}</li>
+                             {% endfor %}
+                          </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        {{ add2.csrf_token }}     <!--   在这个必须加-->
+                        {{ add2.submit }}
+                    </div>
+                </div>
+            </form>
+            </div>
+            <div id="div4" style="display: none">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                     <th>id</th>
+                     <th>标题</th>
+                     <th>时间</th>
+                     <th>内容</th>
+                     <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="table3">
+                {% for ite in diarys %}
+                    <tr>
+                    <td>{{ ite.id }}</td>
+                    <td>{{ ite.title }}</td>
+                    <td>{{ ite.time }}</td>
+                    <td>{{ ite.content }}</td>
+                    <td><a class="btnn btn-info" data-url="{{ url_for('admin_diary_manage', pk=ite.id) }}" href="javascript:;" title="">删除</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <span id="spanFirst3">第一页</span> <span id="spanPre3">上一页</span><span id="spanNext3">下一页</span> <span id="spanLast3">最后一页</span> 第<span id="spanPageNum3"></span>页/共<span id="spanTotalPage3"></span>页
             </div>
 
             {% else %}
@@ -152,14 +239,44 @@
           })
         })
     })
+    $(function(){
+        $(".btnn").on('click', function(){
+        var _self = $(this);
+        $.post(_self.attr('data-url'), function(rest){
+            if (rest === '201'){
+                _self.parents('tr').hide();
+                alert('successful');
+            }else if (rest === '404'){
+                alert('failed')
+            }
+          })
+        })
+    })
 
     $('#btn1').on('click', function (){
         $('#div1').show();
         $('#div2').hide();
+        $('#div3').hide();
+        $('#div4').hide();
+
     })
     $('#btn2').on('click', function (){
         $('#div2').show();
         $('#div1').hide();
+        $('#div3').hide();
+        $('#div4').hide();
+    })
+    $('#btn3').on('click', function (){
+        $('#div3').show();
+        $('#div1').hide();
+        $('#div2').hide();
+        $('#div4').hide();
+    })
+    $('#btn4').on('click', function (){
+        $('#div4').show();
+        $('#div1').hide();
+        $('#div3').hide();
+        $('#div2').hide();
     })
 
 
@@ -184,9 +301,7 @@
      //下一页
      function next() {
 
-
          hideTable();
-
 
          currentRow = pageSize * page;
          maxRow = currentRow + pageSize;
@@ -206,31 +321,19 @@
 
      //上一页
      function pre() {
-
-
          hideTable();
-
-
          page--;
-
-
          currentRow = pageSize * page;
          maxRow = currentRow - pageSize;
          if (currentRow > numberRowsInTable) currentRow = numberRowsInTable;
          for (var i = maxRow; i < currentRow; i++) {
              theTable.rows[i].style.display = '';
          }
-
-
-
-
          if (maxRow == 0) { preText(); firstText(); }
          showPage();
          nextLink();
          lastLink();
      }
-
-
      //第一页
      function first() {
          hideTable();
@@ -239,14 +342,10 @@
              theTable.rows[i].style.display = '';
          }
          showPage();
-
-
          preText();
          nextLink();
          lastLink();
      }
-
-
      //最后一页
      function last() {
          hideTable();
@@ -256,13 +355,10 @@
              theTable.rows[i].style.display = '';
          }
          showPage();
-
-
          preLink();
          nextText();
          firstLink();
      }
-
 
      function hideTable() {
          for (var i = 0; i < numberRowsInTable; i++) {
@@ -270,11 +366,9 @@
          }
      }
 
-
      function showPage() {
          pageNum.innerHTML = page;
      }
-
 
      //总共页数
      function pageCount() {
@@ -282,7 +376,6 @@
          if (numberRowsInTable % pageSize != 0) count = 1;
          return parseInt(numberRowsInTable / pageSize) + count;
      }
-
 
      //显示链接
      function preLink() { spanPre.innerHTML = "<a href='javascript:pre();'>上一页</a>"; }
@@ -307,15 +400,140 @@
              theTable.rows[i].style.display = 'none';
          }
 
-
          totalPage.innerHTML = pageCount();
          pageNum.innerHTML = '1';
-
 
          nextLink();
          lastLink();
      }
 
+     hide();
+    </script>
+    <script>
+     var theTable = document.getElementById("table3");
+     var totalPage = document.getElementById("spanTotalPage3");
+     var pageNum = document.getElementById("spanPageNum3");
+
+
+     var spanPre = document.getElementById("spanPre3");
+     var spanNext = document.getElementById("spanNext3");
+     var spanFirst = document.getElementById("spanFirst3");
+     var spanLast = document.getElementById("spanLast3");
+
+
+     var numberRowsInTable = theTable.rows.length;
+     var pageSize = 10;
+     var page = 1;
+
+
+     //下一页
+     function next() {
+
+         hideTable();
+
+         currentRow = pageSize * page;
+         maxRow = currentRow + pageSize;
+         if (maxRow > numberRowsInTable) maxRow = numberRowsInTable;
+         for (var i = currentRow; i < maxRow; i++) {
+             theTable.rows[i].style.display = '';
+         }
+         page++;
+
+
+         if (maxRow == numberRowsInTable) { nextText(); lastText(); }
+         showPage();
+         preLink();
+         firstLink();
+     }
+
+
+     //上一页
+     function pre() {
+         hideTable();
+         page--;
+         currentRow = pageSize * page;
+         maxRow = currentRow - pageSize;
+         if (currentRow > numberRowsInTable) currentRow = numberRowsInTable;
+         for (var i = maxRow; i < currentRow; i++) {
+             theTable.rows[i].style.display = '';
+         }
+         if (maxRow == 0) { preText(); firstText(); }
+         showPage();
+         nextLink();
+         lastLink();
+     }
+     //第一页
+     function first() {
+         hideTable();
+         page = 1;
+         for (var i = 0; i < pageSize; i++) {
+             theTable.rows[i].style.display = '';
+         }
+         showPage();
+         preText();
+         nextLink();
+         lastLink();
+     }
+     //最后一页
+     function last() {
+         hideTable();
+         page = pageCount();
+         currentRow = pageSize * (page - 1);
+         for (var i = currentRow; i < numberRowsInTable; i++) {
+             theTable.rows[i].style.display = '';
+         }
+         showPage();
+         preLink();
+         nextText();
+         firstLink();
+     }
+
+     function hideTable() {
+         for (var i = 0; i < numberRowsInTable; i++) {
+             theTable.rows[i].style.display = 'none';
+         }
+     }
+
+     function showPage() {
+         pageNum.innerHTML = page;
+     }
+
+     //总共页数
+     function pageCount() {
+         var count = 0;
+         if (numberRowsInTable % pageSize != 0) count = 1;
+         return parseInt(numberRowsInTable / pageSize) + count;
+     }
+
+     //显示链接
+     function preLink() { spanPre.innerHTML = "<a href='javascript:pre();'>上一页</a>"; }
+     function preText() { spanPre.innerHTML = "上一页"; }
+
+
+     function nextLink() { spanNext.innerHTML = "<a href='javascript:next();'>下一页</a>"; }
+     function nextText() { spanNext.innerHTML = "下一页"; }
+
+
+     function firstLink() { spanFirst.innerHTML = "<a href='javascript:first();'>第一页</a>"; }
+     function firstText() { spanFirst.innerHTML = "第一页"; }
+
+
+     function lastLink() { spanLast.innerHTML = "<a href='javascript:last();'>最后一页</a>"; }
+     function lastText() { spanLast.innerHTML = "最后一页"; }
+
+
+     //隐藏表格
+     function hide() {
+         for (var i = pageSize; i < numberRowsInTable; i++) {
+             theTable.rows[i].style.display = 'none';
+         }
+
+         totalPage.innerHTML = pageCount();
+         pageNum.innerHTML = '1';
+
+         nextLink();
+         lastLink();
+     }
 
      hide();
     </script>
