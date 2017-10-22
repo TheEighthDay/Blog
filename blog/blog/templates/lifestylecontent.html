@@ -1,0 +1,19 @@
+{% extends 'lifestyle.html' %}
+{% block title %}
+    <title>Blog of{{ diary_obj.title }}</title>
+{% endblock %}
+{% block innerhtml %}
+    <div class="col-md-12">
+        <div class="fh5co-blog animate-box">
+            <div class="title title-pin text-center">
+                <span class="posted-on">{{ diary_obj.time }}</span>
+                <h3>{{ diary_obj.title }}</h3>
+                <span class="category">Blog</span>
+            </div>
+            <div class="blog-text">
+                <img class="img-responsive" src="{{ url_for('static', filename=diary_obj.picture[12:], _external=True) }}" alt="">
+                <pre>{{ diary_obj.content }}</pre>
+            </div>
+        </div>
+    </div>
+{% endblock %}

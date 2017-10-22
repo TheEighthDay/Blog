@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #coding=utf-8
 import os
+import Image
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -29,14 +30,28 @@ def blog():
 @app.route('/blogcontent/<int:pk>', methods=['GET'])
 def blogcontent(pk):
     """ blogcontent """
+    if (type(pk)!=int):
+        return render_template('404.html')
     blog_obj=Blog.query.filter_by(id=pk).first()
     blogs=Blog.query.filter_by(is_valid=True).all()
     return render_template('blogcontent.html',blog_obj=blog_obj,blogs=blogs)
 
+
+
 @app.route('/lifestyle/', methods=['GET'])
 def lifestyle():
     """ lifestyle """
-    return render_template('lifestyle.html')
+    diarys = Diary.query.filter_by(is_valid=True).all()
+    return render_template('lifestyle.html',diarys=diarys)
+
+@app.route('/lifestylecontent/<int:pk>', methods=['GET'])
+def lifestylecontent(pk):
+    """ blogcontent """
+    if (type(pk)!=int):
+        return render_template('404.html')
+    diary_obj=Diary.query.filter_by(id=pk).first()
+    diarys=Diary.query.filter_by(is_valid=True).all()
+    return render_template('lifestylecontent.html',diarys=diarys,diary_obj=diary_obj)
 
 
 @app.route('/contact/', methods=['GET', 'POST'])
@@ -51,6 +66,7 @@ def contact():
             flash('Failed to send')
 
     return render_template('contact.html',form=form)
+
 text=''
 i=0
 @app.route('/admin',methods=['GET', 'POST'])
@@ -74,20 +90,20 @@ def admin():
          else:
              print('0');
 
-    print (text)
     identify = request.form.get('identify', '')
-    print identify
     if form.validate_on_submit() and identify==text:
             pas = True
     if add.validate_on_submit():
         if(add2.picture.data):
             pas = True
-            print 'yes'
+            flash('Successful')
             f = add2.picture.data
             filename = secure_filename(f.filename)
-            print filename
             addr = 'blog/static/images/diary/' + filename
             f.save(addr)
+            img = Image.open(addr)
+            out = img.resize((800, 570), Image.ANTIALIAS)  # resize image with high-quality
+            out.save(addr)
             diary = Diary(
                 title=add2.data['title'],
                 time=add2.data['time'],
@@ -97,7 +113,7 @@ def admin():
             )
             db.session.add(diary)
             db.session.commit()
-            flash('Successful')
+
         else:
             pas=True
             blog = Blog(

@@ -95,9 +95,8 @@
 					   			<div class="row">
 						   			<div class="col-md-10 col-md-offset-1 slider-text">
 						   				<div class="slider-text-inner">
-						   					<h1>Not Every Project Needs To Be Perfect</h1>
-												<h2>Free html5 templates Made by <a href="http://freehtml5.co/" target="_blank">freehtml5.co</a></h2>
-												<p class="ct"><a href="#">Learn More <i class="icon-arrow-right"></i></a></p>
+						   					<h1>{{ blogs[-1].title }}</h1>
+												<p class="ct"><a href="{{ url_for('blogcontent',pk=blogs[-1].id) }}">Learn More <i class="icon-arrow-right"></i></a></p>
 						   				</div>
 						   			</div>
 						   		</div>
@@ -109,9 +108,8 @@
 					   			<div class="row">
 						   			<div class="col-md-10 col-md-offset-1 slider-text">
 						   				<div class="slider-text-inner">
-						   					<h1>Minimal &amp; Clean Blog WordPress</h1>
-												<h2>Free html5 templates Made by <a href="http://freehtml5.co/" target="_blank">freehtml5.co</a></h2>
-												<p class="ct"><a href="#">Learn More <i class="icon-arrow-right"></i></a></p>
+						   					<h1>{{ blogs[-2].title }}</h1>
+												<p class="ct"><a href="{{ url_for('blogcontent',pk=blogs[-2].id) }}">Learn More <i class="icon-arrow-right"></i></a></p>
 						   				</div>
 						   			</div>
 						   		</div>
@@ -123,9 +121,8 @@
 					   			<div class="row">
 						   			<div class="col-md-10 col-md-offset-1 slider-text">
 						   				<div class="slider-text-inner">
-						   					<h1>What Would You Like To Learn?</h1>
-												<h2>Free html5 templates Made by <a href="http://freehtml5.co/" target="_blank">freehtml5.co</a></h2>
-												<p class="ct"><a href="#">Learn More <i class="icon-arrow-right"></i></a></p>
+						   					<h1>{{ blogs[-3].title }}</h1>
+												<p class="ct"><a href="{{ url_for('blogcontent',pk=blogs[-3].id) }}">Learn More <i class="icon-arrow-right"></i></a></p>
 						   				</div>
 						   			</div>
 						   		</div>
@@ -160,44 +157,46 @@
 			<div class="row">
 				<div class="col-md-9 col-padded-right">
 					<div class="row">
-						<div class="col-md-12">
+						<div class="col-md-10">
 							<div class="fh5co-blog animate-box">
 								<div class="title title-pin text-center">
-									<span class="posted-on">{{ diarys[0].title }}</span>
-									<h3><a href="#">{{ diarys[0].time }}</a></h3>
+									<span class="posted-on">{{ diarys[-1].title }}</span>
+									<h3><a href="{{ url_for('lifestylecontent',pk=diarys[-1].id) }}">{{ diarys[-1].time }}</a></h3>
 									<span class="category">Lifestyle</span>
 								</div>
-								<a href="#"><img class="img-responsive" src="{{ url_for('static', filename=diarys[0].picture[12:], _external=True) }}" alt=""></a>
+								<a href="{{ url_for('lifestylecontent',pk=diarys[-1].id) }}"><img class="img-responsive" src="{{ url_for('static', filename=diarys[-1].picture[12:], _external=True) }}" alt=""></a>
 								<div class="blog-text text-center">
-									<p>{{ diarys[0].content }}</p>
+									<p>{{ diarys[-1].content[0:100] }}......</p>
 									
 								</div> 
 							</div>
 						</div>
                         {% for i in range(4) %}
-						<div class="col-md-6">
+						<div class="col-md-5">
 							<div class="fh5co-blog animate-box">
 								<div class="title text-center">
 									<span class="posted-on">{{ diarys[i].title }}</span>
-									<h3><a href="#">{{ diarys[i].time }}</a></h3>
+									<h3><a href="{{ url_for('lifestylecontent',pk=diarys[i].id) }}">{{ diarys[i].time }}</a></h3>
 									<span class="category">Lifestyle</span>
 								</div>
-								<a href="#"><img class="img-responsive" src="{{ url_for('static', filename=diarys[i].picture[12:], _external=True) }}" alt=""></a>
+								<a href="{{ url_for('lifestylecontent',pk=diarys[i].id) }}"><img class="img-responsive "  src="{{ url_for('static', filename=diarys[i].picture[12:], _external=True) }}" alt=""></a>
 								<div class="blog-text text-center">
-                                    <p>{{ diarys[i].content }}</p>
+                                    <p>{{ diarys[i].content[0:100] }}......</p>
 								</div> 
 							</div>
 						</div>
                         {% endfor %}
-				
-				<aside id="sidebar">
+
+			        </div>
+		        </div>
+                <aside id="sidebar">
 					<div class="col-md-3">
 						<div class="side animate-box">
 							<div class="col-md-12 col-md-offset-0 text-center fh5co-heading fh5co-heading-sidebar">
 								<h2><span>About Me</span></h2>
 							</div>
 							<div class="fh5co-staff">
-								<img src="{{ url_for('static', filename='images/blog-2.jpg', _external=True) }}" alt="Free HTML5 Templates by FreeHTML5.co">
+								<img src="{{ url_for('static', filename='images/me.jpg', _external=True) }}" alt="Free HTML5 Templates by FreeHTML5.co">
 								<h3>Tiankaibin</h3>
 								<strong class="role">An undergraduate student at the University of Electronic Science and technology of China</strong>
 								<p>School of information and software engineering, specializes in Python, now do Flask, reptiles, etc., can use C, JS, Java, Html and so on</p>
@@ -235,13 +234,12 @@
 								</a>
 							</div>
 						</div>
-						
+
 					</div>
 				</aside>
-
-			</div>
-		</div>
-	</div>
+	        </div>
+        </div>
+    </div>
 
 	
 	<footer id="fh5co-footer" role="contentinfo">
